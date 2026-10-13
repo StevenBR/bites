@@ -4,8 +4,8 @@ import { RestaurantSchema, type Restaurant } from "../schemas/restaurant.js";
 const router = express.Router();
 
 router.get("/", validate(RestaurantSchema), async (req, res) => {
-    const data = req.body as Restaurant
+    const data = req.body; //currently don't know if any data is actually included, what zod is for
     res.send("hello");
-})
+});
 
-export default router
+export default router;

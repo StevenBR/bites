@@ -1,7 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-// import type { ZodSchema } from "zod";
 import { ZodSchema } from "zod/v3";
-
 
 export const validate =
     <T>(schema: ZodSchema<T>) =>
@@ -9,8 +7,9 @@ export const validate =
             const result = schema.safeParse(req.body);
             if (!result.success) {
                 return res.status(400).json({
-                    success: false, error: result.error.errors
+                    success: false,
+                    error: result.error.errors,
                 });
             }
             next();
-        }
+        };

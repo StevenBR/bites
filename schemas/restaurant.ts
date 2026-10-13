@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 //for creating a new restaurant
+// export const RestaurantSchema = z.object({
 export const RestaurantSchema = z.object({
     name: z.string().min(1),
     location: z.string().min(1),
