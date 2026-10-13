@@ -1,7 +1,10 @@
 GET http://localhost:3000/restaurants
-# [Options]
-# output: -
+{
+        "name": "Better food",
+        "location": "0,0",
+        "cuisines": ["Italian", "French"]
+    }
 
-GET http://localhost:3000/cuisines
+# GET http://localhost:3000/cuisines
 # [Options]
 # output: -
