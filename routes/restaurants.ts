@@ -17,30 +17,34 @@ router.post("/", validate(RestaurantSchema), async (req, res, next) => {
         const hashData = { id, name: data.name, location: data.location };
         const addResult = await client.hSet(restaurantKey, hashData);
 
-        console.log(`Added to ${addResult} to ${restaurantKey} `);
+        console.log(`# of fields aded to ${addResult} to ${restaurantKey} `);
 
         return successResponse(res, hashData, "Added new restaurant");
     } catch (error) {
         next(error);
     }
-    res.send("hello");
+    // res.send("hello");
 });
 
 router.get(
-    "/:restaurantId",
-    checkRestaurantExists,
-    async (req: Request<{ restaurantId: string }>, res, next) => {
-        const { restaurantId } = req.params;
-        try {
-            const client = await initializeRedisClient();
-            const restaurantKey = restaurantKeyById(restaurantId);
-            const restaurant = await client.hGetAll(restaurantKey);
+  "/:restaurantId",
+  checkRestaurantExists,
+  async (req: Request<{ restaurantId: string }>, res, next) => {
+    const { restaurantId } = req.params;
+    try {
+      const client = await initializeRedisClient();
+      const restaurantKey = restaurantKeyById(restaurantId);
+      const [viewCount, restaurant] = await Promise.all([
+        client.hIncrBy(restaurantKey, "viewCount", 1),
+        client.hGetAll(restaurantKey)
+      ]);
 
-            return successResponse(res, restaurant);
-        } catch (error) {
-            next(error);
-        }
-    },
+      return successResponse(res, restaurant);
+
+    } catch (error) {
+      next(error);
+    }
+  },
 );
 
 export default router;
